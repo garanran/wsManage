@@ -2,6 +2,7 @@ import React from 'react'
 import request from '../../request';
 import { List } from 'antd';
 import Card from './newsCard';
+import './newsList.css'
 
 class NewsList extends React.Component {
     constructor(props) {
@@ -18,6 +19,8 @@ class NewsList extends React.Component {
         }).catch(err => console.log(err))
     }
 
+    handleNewsEdit = (id) => this.props.history.push(`/edit/${id}`);
+
     render() {
         const { newsList } = this.state;
         return (
@@ -28,7 +31,7 @@ class NewsList extends React.Component {
                     footer={<div>新增</div>}
                     bordered
                     dataSource={newsList}
-                    renderItem={item => <Card {...item}/>}
+                    renderItem={item => <Card onNewsEdit={this.handleNewsEdit} {...item}/>}
                 />
             </div>
         )

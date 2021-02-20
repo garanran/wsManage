@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-export const API_ROOT = 'http://172.28.29.13/portal/';
+export const API_ROOT = 'http://172.28.29.13:8080/portal/';
 
 
 const defaultOptions = {

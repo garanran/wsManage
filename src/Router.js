@@ -8,7 +8,7 @@ const BasicRoute = () => (
     <Router>
         <Switch>
             <Route exact path="/" component={NewsList}/>
-            <Route exact path="/edit" component={NewsDetail}/>
+            <Route exact path="/edit/:id" component={NewsDetail}/>
         </Switch>
     </Router>
 );

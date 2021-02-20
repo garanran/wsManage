@@ -1,0 +1,46 @@
+.news_card {
+    border: 1px solid #efefef;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+}
+
+.news_card img {
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+}
+.news_card .card_content {
+    position: relative;
+    width: 100%;
+}
+
+.news_card .title {
+    position: absolute;
+    top: 0;
+}
+
+.news_card .author {
+    position: absolute;
+    top: 20px;
+}
+
+.news_card .articleSynopsis {
+    position: absolute;
+    top: 40px;
+    width: 200px;
+}
+
+.news_card .actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 105px;
+    color: dodgerblue;
+}
+
+span {
+    margin-right: 20px;
+    cursor: pointer;
+}
