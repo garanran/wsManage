@@ -3,7 +3,7 @@ import request from '../../request';
 import { Form, Input, Button, Upload, message,Icon } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import Editor from '../../components/Editor'
+import Editor from '../../components/Editor';
 import './newsDetail.css'
 
 
@@ -36,61 +36,61 @@ class NewsDetail extends React.Component {
     }
 
     componentDidMount() {
-        request(`/article/get_article_info?id=${this.props.match.params.id}`)
-        .then((data) => {
-            const { title, author, articleSynopsis, content, imageUrl } = data
-            this.formRef.current.setFieldsValue({
-                title,
-                author,
-                articleSynopsis,
-                content,
-            })
-            this.setState({
-                imageUrl,
-            })
-        }).catch(err => console.log(err))
+        const { match: { params: { id } } } = this.props;
+        this.setState({ id })
+        if (id) {
+            request(`/article/get_article_info?id=${id}`)
+            .then((data) => {
+                const { title, author, articleSynopsis, content, imageUrl } = data
+                this.formRef.current.setFieldsValue({
+                    title,
+                    author,
+                    articleSynopsis,
+                    content,
+                })
+                this.setState({
+                    imageUrl,
+                })
+            }).catch(err => console.log(err))
+        }
     }
 
     handleChange = info => {
-        console.log('info----', info)
         if (info.file.status === 'uploading') {
             this.setState({ loading: true });
             return;
         }
         if (info.file.status === 'done') {
             const { data: { imageID } } = info.file.response;
+            getBase64(info.file.originFileObj, imageUrl =>
+                this.setState({
+                  imageUrl,
+                  loading: false,
+                }),
+            );
             this.setState({ imageID })
-            console.log('imageID---', imageID)
         }
     };
 
-    uploadMedia = (componentsData) => {
-        console.log('componentsData', componentsData)
-        const formData = new FormData();
-        formData.append('file', componentsData);
-
-        request('/image/add_image', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => data.data)
-        .then(data=> componentsData.onSuccess())
-        // .then(data => {
-        //     this.setState({ imageId: data.imageID })
-        //     // return data
-        // })
-        .catch(err => console.log(err))
-    }
-
     onFinish = (values) => {
-        // this.formRef.current.resetFields();
+       const { id } = this.state;
         const allData = {
             ...values,
-            imageId: this.state.imageId,
-        }
-        console.log('allData----', allData)
-      };
+            id: Number(id),
+            imageId: this.state.imageID,
+            articleTypeId: 1,
+        };
+        delete allData.imageUrl;
+        request('/article/update_article', {
+            method: 'POST',
+            body: { ...allData },
+        })
+        .then(() => {
+            message.info('添加成功');
+            this.props.history.push('/');
+        }).catch(err => console.log(err))
+        this.formRef.current.resetFields();
+    };
 
     render() {
         const { loading, imageUrl } = this.state;

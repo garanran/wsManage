@@ -16,7 +16,7 @@ class NewsList extends React.Component {
     }
 
     getNewsList = () => {
-        request('article/get_article_list?limit=100&offset=0&articleTypeId=1')
+        request('/article/get_article_list?limit=100&offset=0&articleTypeId=1')
         .then((data) => {
             const { list } = data;
             this.setState({ newsList: list })
@@ -24,6 +24,8 @@ class NewsList extends React.Component {
     }
 
     handleNewsEdit = (id) => this.props.history.push(`/edit/${id}`);
+
+    handleNewsAdd = () => this.props.history.push('/add');
 
     handleNewsDelete = (id) => {
         request('/article/del_article', {
@@ -43,7 +45,7 @@ class NewsList extends React.Component {
                 <List
                     size="large"
                     header={<div>全部文章</div>}
-                    footer={<div>新增</div>}
+                    footer={<div className="news_list_footer" onClick={this.handleNewsAdd}>新增</div>}
                     bordered
                     dataSource={newsList}
                     renderItem={item => <Card onNewsEdit={this.handleNewsEdit} onNewsDelete={this.handleNewsDelete} {...item}/>}

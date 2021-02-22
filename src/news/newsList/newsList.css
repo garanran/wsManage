@@ -1,3 +1,8 @@
 .news_list {
     padding: 10px 40px;
 }
+
+.news_list_footer {
+    color:dodgerblue;
+    cursor: pointer;
+}

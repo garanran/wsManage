@@ -50,7 +50,35 @@ class Editor extends React.Component {
             'undo',  // 撤销
             'redo'  // 重复
         ]
-        editor.config.uploadImgShowBase64 = true
+        editor.config.uploadImgShowBase64 = true;
+        editor.config.uploadFileName = 'file';
+        editor.config.uploadImgServer = 'http://172.28.29.13:8080/portal/image/add_image'
+        editor.config.uploadImgMaxLength = 1;
+        editor.config.uploadImgHooks = {
+            success: function(xhr) {
+                console.log('success', xhr)
+            },
+            // 图片上传并返回了结果，但图片插入时出错了
+            fail: function(xhr, editor, resData) {
+                console.log('fail', resData)
+            },
+            // 上传图片出错，一般为 http 请求的错误
+            error: function(xhr, editor, resData) {
+                console.log('error', xhr, resData)
+            },
+            customInsert: function(insertImgFn, result) {
+                // result 即服务端返回的接口
+                const img = {
+                    url: `http://172.28.29.13/images/group1/portal/${result.data.imageUrl}`,
+                    alt: '',
+                    href: 'www.baidu.com'
+                }
+                console.log('result', result)
+
+                // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
+                insertImgFn(`http://172.28.29.13/images/group1/portal/${result.data.imageUrl}`)
+            }
+        }
         editor.create()
     };
 
