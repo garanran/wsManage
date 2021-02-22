@@ -1,6 +1,6 @@
 import React from 'react'
 import request from '../../request';
-import { List } from 'antd';
+import { List, message } from 'antd';
 import Card from './newsCard';
 import './newsList.css'
 
@@ -12,6 +12,10 @@ class NewsList extends React.Component {
         }
     }
     componentDidMount() {
+        this.getNewsList()
+    }
+
+    getNewsList = () => {
         request('article/get_article_list?limit=100&offset=0&articleTypeId=1')
         .then((data) => {
             const { list } = data;
@@ -20,6 +24,17 @@ class NewsList extends React.Component {
     }
 
     handleNewsEdit = (id) => this.props.history.push(`/edit/${id}`);
+
+    handleNewsDelete = (id) => {
+        request('/article/del_article', {
+            method: 'POST',
+            body: { ids: [id] },
+        })
+        .then(() => {
+            message.info('删除成功');
+            this.getNewsList();
+        }).catch(err => console.log(err))
+    }
 
     render() {
         const { newsList } = this.state;
@@ -31,7 +46,7 @@ class NewsList extends React.Component {
                     footer={<div>新增</div>}
                     bordered
                     dataSource={newsList}
-                    renderItem={item => <Card onNewsEdit={this.handleNewsEdit} {...item}/>}
+                    renderItem={item => <Card onNewsEdit={this.handleNewsEdit} onNewsDelete={this.handleNewsDelete} {...item}/>}
                 />
             </div>
         )

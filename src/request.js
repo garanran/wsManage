@@ -2,7 +2,6 @@ import 'whatwg-fetch';
 
 export const API_ROOT = 'http://172.28.29.13:8080/portal/';
 
-
 const defaultOptions = {
   method: 'GET',
   mode: 'cors',
@@ -61,7 +60,6 @@ export default function request(url, option) {
       ...defaultOptions,
       ...option,
     };
-    // const signature = creatSignKey(url, options.body);
   
     if (options.method === 'POST' || options.method === 'PUT' || options.method === 'DELETE') {
       if (!(options.body instanceof FormData)) {
@@ -88,7 +86,6 @@ export default function request(url, option) {
       // eslint-disable-next-line no-param-reassign
       url = `${API_ROOT.replace(/\/+$/g, '')}/${url.replace(/^\/+/g, '')}`;
     }
-  
     const fetchPromise = fetch(url, options);
     const timeoutPromise = new Promise((resolve, reject) => {
       setTimeout(() => {

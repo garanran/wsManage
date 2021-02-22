@@ -3,6 +3,7 @@ import request from '../../request';
 import { Form, Input, Button, Upload, message,Icon } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import Editor from '../../components/Editor'
 import './newsDetail.css'
 
 
@@ -42,6 +43,7 @@ class NewsDetail extends React.Component {
                 title,
                 author,
                 articleSynopsis,
+                content,
             })
             this.setState({
                 imageUrl,
@@ -52,21 +54,13 @@ class NewsDetail extends React.Component {
     handleChange = info => {
         console.log('info----', info)
         if (info.file.status === 'uploading') {
-            debugger
             this.setState({ loading: true });
             return;
         }
         if (info.file.status === 'done') {
-            debugger
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, (imageUrl) => {
-                console.log('imageUrl---', imageUrl)
-                    this.setState({
-                        imageUrl,
-                        loading: false,
-                    })
-                } 
-            );
+            const { data: { imageID } } = info.file.response;
+            this.setState({ imageID })
+            console.log('imageID---', imageID)
         }
     };
 
@@ -147,8 +141,6 @@ class NewsDetail extends React.Component {
                         listType="picture-card"
                         className="avatar-uploader"
                         showUploadList={false}
-                        // headers
-                        // action={this.uploadMedia}
                         action='http://172.28.29.13:8080/portal/image/add_image'
                         beforeUpload={beforeUpload}
                         onChange={this.handleChange}
@@ -163,13 +155,14 @@ class NewsDetail extends React.Component {
                 >
                     <TextArea />
                 </Form.Item>
-                {/* <Form.Item
+                <Form.Item
                     label="内容"
                     name="content"
                     rules={[{ required: true, message: 'Please input content!' }]}
                 >
-                    <Input />
-                </Form.Item> */}
+                    <Editor />
+                </Form.Item>
+                
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">
                     提交
