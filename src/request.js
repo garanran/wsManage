@@ -1,8 +1,6 @@
 import 'whatwg-fetch';
 import { API_ROOT } from './env';
 
-// export const API_ROOT = 'http://172.28.29.13:8080/portal/';
-
 const defaultOptions = {
   method: 'GET',
   mode: 'cors',
@@ -85,7 +83,6 @@ export default function request(url, option) {
     if (!/http(s)?:\/\/.+/.test(url) && !/^\/mocks/.test(url)) {
       // 请求地址不包括http、https时使用API地址
       // eslint-disable-next-line no-param-reassign
-      console.log('API_ROOT', API_ROOT)
       url = `${API_ROOT.replace(/\/+$/g, '')}/${url.replace(/^\/+/g, '')}`;
     }
     const fetchPromise = fetch(url, options);

@@ -1,11 +1,11 @@
 import React from 'react'
-import {IMG_ROOT} from '../../env'
+import {API_IMG} from '../../env'
 import './newsCard.css'
 
 const Card = (props) => {
     const { id, title, imageUrl, author, articleSynopsis, onNewsEdit, onNewsDelete } = props;
     
-    const url = `http://172.28.29.13/images/group1/portal/${imageUrl}`
+    const url = `${API_IMG}/${imageUrl}`
     console.log('IMG_ROOT----', url)
     return (
         <div className="news_card">

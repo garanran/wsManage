@@ -3,6 +3,7 @@ import request from '../../request';
 import { Form, Input, Button, Upload, message,Icon } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { API_IMG } from '../../env'
 import Editor from '../../components/Editor';
 import './newsDetail.css'
 
@@ -49,7 +50,7 @@ class NewsDetail extends React.Component {
                     content,
                 })
                 this.setState({
-                    imageUrl,
+                    imageUrl: `${API_IMG}/${imageUrl}`,
                 })
             }).catch(err => console.log(err))
         }
