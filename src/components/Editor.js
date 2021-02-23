@@ -1,6 +1,8 @@
 import React from 'react';
 import E from 'wangeditor';
 
+let editor = null;
+
 class Editor extends React.Component {
     constructor(props) {
         super(props);
@@ -10,23 +12,28 @@ class Editor extends React.Component {
          
     }
 
-    // static getDerivedStateFromProps(nextProps, prevState) {
-    //     const { value } = nextProps;
-    //     editor && editor.txt.html(value)
-    //     return null;
-    // }
+    static getDerivedStateFromProps(nextProps, prevState) {
+        const { value } = nextProps;
+        const { editorContent } = prevState;
+        if ( value !== editorContent ) {
+            editor && editor.txt.html(value);
+            return {
+                editorContent: value
+            }
+        }
+        return null;
+    }
 
     componentDidMount() {
         const elemMenu = this.refs.editorElemMenu;
         const elemBody = this.refs.editorElemBody;
-        const editor = new E(elemMenu, elemBody);
-
+        editor = new E(elemMenu, elemBody);
         // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
         editor.config.onchange = html => {
             this.setState({
-                editorContent: editor.txt.html()
+                editorContent: html
             })
-            this.props.onChange(editor.txt.html());
+            this.props.onChange(html);
         }
         editor.config.menus = [
             'head',  // 标题
@@ -67,7 +74,6 @@ class Editor extends React.Component {
                 console.log('error', xhr, resData)
             },
             customInsert: function(insertImgFn, result) {
-                // result 即服务端返回的接口
                 const img = {
                     url: `http://172.28.29.13/images/group1/portal/${result.data.imageUrl}`,
                     alt: '',
@@ -75,7 +81,6 @@ class Editor extends React.Component {
                 }
                 console.log('result', result)
 
-                // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
                 insertImgFn(`http://172.28.29.13/images/group1/portal/${result.data.imageUrl}`)
             }
         }
